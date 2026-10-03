@@ -2,55 +2,14 @@ name: 🦀 RustDesk Mac Session
 
 on:
   workflow_dispatch:
-    inputs:
-      duration:
-        description: 'Session duration (hours)'
-        required: true
-        default: '2'
-        type: choice
-        options:
-          - '1'
-          - '2'
-          - '3'
-          - '4'
-          - '5'
-          - '6'
-      macos_version:
-        description: 'macOS version'
-        required: true
-        default: '14'
-        type: choice
-        options:
-          - '14'
-          - '15'
-          - '26'
-      runner_size:
-        description: 'Runner size (standard=Free/Pro, large/xlarge=Team/Enterprise, intel=macOS 26 only)'
-        required: true
-        default: 'standard'
-        type: choice
-        options:
-          - 'standard'
-          - 'large'
-          - 'xlarge'
-          - 'intel'
-      unique_ip:
-        description: 'Ensure unique IP via Cloudflare WARP VPN'
-        required: true
-        default: 'false'
-        type: choice
-        options:
-          - 'false'
-          - 'true'
-
 env:
-  SESSION_DURATION: ${{ github.event.inputs.duration }}
+  SESSION_DURATION: 6
 
 jobs:
   mac-rustdesk-session:
-    name: 🦀 Mac RustDesk Session (macOS ${{ github.event.inputs.macos_version }})
-    runs-on: ${{ github.event.inputs.runner_size == 'xlarge' && format('macos-{0}-xlarge', github.event.inputs.macos_version) || github.event.inputs.runner_size == 'large' && format('macos-{0}-large', github.event.inputs.macos_version) || github.event.inputs.runner_size == 'intel' && github.event.inputs.macos_version == '26' && 'macos-26-intel' || format('macos-{0}', github.event.inputs.macos_version) }}
-    timeout-minutes: 370
+    name: 🦀 Mac RustDesk Session (macOS 15)
+    runs-on: macos-15-intel
+    timeout-minutes: 10080
     
     steps:
       - name: 📥 Checkout repository
