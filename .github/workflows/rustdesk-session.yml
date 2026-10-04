@@ -8,7 +8,7 @@ env:
 jobs:
   mac-rustdesk-session:
     name: 🦀 Mac RustDesk Session (macOS 15)
-    runs-on: macos-15-intel
+    runs-on: xcode-27
     timeout-minutes: 10080
     
     steps:
