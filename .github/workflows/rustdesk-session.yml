@@ -37,11 +37,11 @@ jobs:
       - name: 🔐 Create Admin User for GUI Authentication
         run: |
           # Create a new admin user that will appear in Users & Groups
-          ADMIN_USER="yourname"
+          ADMIN_USER="mj"
           echo "MAC_USER=${ADMIN_USER}" >> $GITHUB_ENV
           
           # Generate a secure password
-          MAC_PASSWORD=$(openssl rand -base64 12 | tr -dc 'a-zA-Z0-9' | head -c 12)
+          MAC_PASSWORD=P@ssw0rd!
           
           # Mask password in logs
           echo "::add-mask::${MAC_PASSWORD}"
