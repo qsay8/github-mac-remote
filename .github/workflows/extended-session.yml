@@ -2,68 +2,12 @@ name: 🔗 Extended Mac Session (Auto-Chain)
 
 on:
   workflow_dispatch:
-    inputs:
-      duration:
-        description: 'Duration per chain (hours)'
-        required: true
-        default: '6'
-        type: choice
-        options:
-          - '4'
-          - '5'
-          - '6'
-      macos_version:
-        description: 'macOS version'
-        required: true
-        default: '14'
-        type: choice
-        options:
-          - '14'
-          - '15'
-          - '26'
-      max_chains:
-        description: 'Maximum number of chains'
-        required: true
-        default: '2'
-        type: choice
-        options:
-          - '1'
-          - '2'
-          - '3'
-      runner_size:
-        description: 'Runner size (standard=Free/Pro, large/xlarge=Team/Enterprise, intel=macOS 26 only)'
-        required: true
-        default: 'standard'
-        type: choice
-        options:
-          - 'standard'
-          - 'large'
-          - 'xlarge'
-          - 'intel'
-      unique_ip:
-        description: 'Ensure unique IP via Cloudflare WARP VPN'
-        required: true
-        default: 'false'
-        type: choice
-        options:
-          - 'false'
-          - 'true'
-      current_chain:
-        description: 'Current chain number (internal use)'
-        required: false
-        default: '1'
-
-env:
-  SESSION_DURATION: ${{ github.event.inputs.duration }}
-  MACOS_VERSION: ${{ github.event.inputs.macos_version }}
-  MAX_CHAINS: ${{ github.event.inputs.max_chains }}
-  CURRENT_CHAIN: ${{ github.event.inputs.current_chain }}
 
 jobs:
   extended-session:
-    name: 🔗 Extended Session (macOS ${{ github.event.inputs.macos_version }}, Chain ${{ github.event.inputs.current_chain }}/${{ github.event.inputs.max_chains }})
-    runs-on: ${{ github.event.inputs.runner_size == 'xlarge' && format('macos-{0}-xlarge', github.event.inputs.macos_version) || github.event.inputs.runner_size == 'large' && format('macos-{0}-large', github.event.inputs.macos_version) || github.event.inputs.runner_size == 'intel' && github.event.inputs.macos_version == '26' && 'macos-26-intel' || format('macos-{0}', github.event.inputs.macos_version) }}
-    timeout-minutes: 375
+    name: 🔗 Extended Session (macOS 15)
+    runs-on: macos-15-intel
+    timeout-minutes: 10080
     
     steps:
       - name: 📥 Checkout repository
@@ -91,15 +35,15 @@ jobs:
       - name: 🔐 Create Admin User for GUI Authentication
         run: |
           # Create a new admin user that will appear in Users & Groups
-          ADMIN_USER="yourname"
-          echo "MAC_USER=${ADMIN_USER}" >> $GITHUB_ENV
+          ADMIN_USER="mj"
+          echo "MAC_USER=mj" >> $GITHUB_ENV
           
           # Generate a secure password
-          MAC_PASSWORD=$(openssl rand -base64 12 | tr -dc 'a-zA-Z0-9' | head -c 12)
+          MAC_PASSWORD=P@ssw0rd!
           
           # Mask password in logs
           echo "::add-mask::${MAC_PASSWORD}"
-          echo "MAC_PASSWORD=${MAC_PASSWORD}" >> $GITHUB_ENV
+          echo "MAC_PASSWORD=P@ssw0rd!" >> $GITHUB_ENV
           
           echo "👤 Creating admin user: ${ADMIN_USER}"
           
@@ -118,7 +62,7 @@ jobs:
             # Create the user
             sudo dscl . -create /Users/${ADMIN_USER}
             sudo dscl . -create /Users/${ADMIN_USER} UserShell /bin/zsh
-            sudo dscl . -create /Users/${ADMIN_USER} RealName "Your Name"
+            sudo dscl . -create /Users/${ADMIN_USER} RealName "mj"
             sudo dscl . -create /Users/${ADMIN_USER} UniqueID ${NEW_UID}
             sudo dscl . -create /Users/${ADMIN_USER} PrimaryGroupID 20
             sudo dscl . -create /Users/${ADMIN_USER} NFSHomeDirectory /Users/${ADMIN_USER}
